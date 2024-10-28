@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TallerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TallerApplication.class, args);
+		SpringApplication.run(TallerApplication.class, args);  // Inicia el contexto de Spring Boot
 	}
-
 }

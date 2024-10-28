@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Municipios</title> <!-- Título de la página -->
+</head>
+<body>
+<h1>Reporte de Municipios por Departamento</h1> <!-- Encabezado principal -->
+
+<!-- Tabla que muestra el reporte de municipios por departamento -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>Departamento</th>
+        <th>Densidad Urbana</th>
+        <th>Densidad Total</th>
+        <th>Porcentaje Población Urbana</th>
+        <th>Porcentaje Población Rural</th>
+        <th>Área Promedio</th> <!-- Nueva columna para el área promedio -->
+        <th>Municipio Más Grande</th>
+        <th>Municipio Más Pequeño</th>
+        <th>Mayor Densidad</th>
+        <th>Menor Densidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Itera sobre el mapa "reporte" pasado desde el controlador y muestra cada entrada -->
+    <tr th:each="entry : ${reporte}">
+        <td th:text="${entry.value['nombreDepartamento']}">Departamento</td>
+        <td th:text="${entry.value['densidadUrbana']}">Densidad Urbana</td>
+        <td th:text="${entry.value['densidadTotal']}">Densidad Total</td>
+        <td th:text="${entry.value['porcentajeUrbana']}">Porcentaje Urbana</td>
+        <td th:text="${entry.value['porcentajeRural']}">Porcentaje Rural</td>
+        <td th:text="${entry.value['areaPromedio']}">Área Promedio</td>
+        <td th:text="${entry.value['municipioMasGrande']}">Municipio Más Grande</td>
+        <td th:text="${entry.value['municipioMasPequeño']}">Municipio Más Pequeño</td>
+        <td th:text="${entry.value['mayorDensidad']}">Mayor Densidad</td>
+        <td th:text="${entry.value['menorDensidad']}">Menor Densidad</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
