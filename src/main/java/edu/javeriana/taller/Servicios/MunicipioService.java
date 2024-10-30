@@ -118,9 +118,13 @@ public class MunicipioService {
         List<Municipio> listaMunicipios = municipios.stream()
                 .filter(m -> m.getNombreDepartamento().equalsIgnoreCase(departamento))
                 .collect(Collectors.toList());
-        return listaMunicipios.isEmpty() ? Collections.singletonMap("error", "Departamento no encontrado")
-                : generarReporteJSON(listaMunicipios).get(listaMunicipios.get(0).getCodigoDepartamento());
+        if (listaMunicipios.isEmpty()) {
+            return Collections.singletonMap("error", "Departamento no encontrado");
+        }
+        // Retorna el reporte del departamento específico usando su código como clave en el mapa
+        return generarReporteJSON(listaMunicipios).get(String.valueOf(listaMunicipios.get(0).getCodigoDepartamento()));
     }
+
 
     /**
      * Limpia el texto eliminando caracteres especiales.
@@ -128,10 +132,22 @@ public class MunicipioService {
      * @return texto limpio.
      */
     private String limpiarTexto(String texto) {
-        return texto.trim().replace("\t", "").replace("\"", "")
-                .replace("¡", "í").replace("¢", "ó").replace("¤", "ñ")
-                .replace("", "é").replace("£", "ú");
+        return texto.trim()
+                .replace("\t", "")
+                .replace("\"", "")
+                .replace("¡", "í")
+                .replace("¢", "ó")
+                .replace("¤", "ñ")
+                .replace("", "é")
+                .replace("£", "ú")
+                .replace("Â", "") // Elimina caracteres extraños
+                .replace("¿", "á") // Ajustes adicionales
+                .replace("³", "ó")
+                .replace("Ã", "i")
+                .replace("©", "e")
+                .replace("µ", "o"); // Otros posibles caracteres problemáticos
     }
+
 
     /**
      * Agrupa los municipios por código de departamento.

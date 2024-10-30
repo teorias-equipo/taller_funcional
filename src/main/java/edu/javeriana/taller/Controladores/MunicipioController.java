@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +62,12 @@ public class MunicipioController {
      * @return reporte del departamento solicitado.
      */
     @GetMapping("/departamento")
-    public Map<String, Object> obtenerReporteDepartamento(@RequestParam String departamento) {
+    public String obtenerReporteDepartamento(@RequestParam String departamento, Model model) {
         List<Municipio> municipios = municipioService.leerArchivoCSV("src/main/resources/datosDivipola.csv");
-        return municipioService.generarReportePorDepartamento(municipios, departamento);
+        Map<String, Object> reporte = municipioService.generarReportePorDepartamento(municipios, departamento);
+        model.addAttribute("reporte", reporte);
+        return "reporteDepartamento"; // Nombre del archivo Thymeleaf en `src/main/resources/templates`
     }
+
+
 }

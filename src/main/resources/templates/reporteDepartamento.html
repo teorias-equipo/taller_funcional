@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Departamento</title>
+</head>
+<body>
+<h1>Reporte del Departamento</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nombre del Departamento</th>
+        <th>Densidad Urbana</th>
+        <th>Densidad Total</th>
+        <th>Porcentaje Urbana</th>
+        <th>Porcentaje Rural</th>
+        <th>Área Promedio</th>
+        <th>Municipio Más Grande</th>
+        <th>Municipio Más Pequeño</th>
+        <th>Mayor Densidad</th>
+        <th>Menor Densidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${reporte['nombreDepartamento']}">Nombre del Departamento</td>
+        <td th:text="${reporte['densidadUrbana']}">Densidad Urbana</td>
+        <td th:text="${reporte['densidadTotal']}">Densidad Total</td>
+        <td th:text="${reporte['porcentajeUrbana']}">Porcentaje Urbana</td>
+        <td th:text="${reporte['porcentajeRural']}">Porcentaje Rural</td>
+        <td th:text="${reporte['areaPromedio']}">Área Promedio</td>
+        <td th:text="${reporte['municipioMasGrande']}">Municipio Más Grande</td>
+        <td th:text="${reporte['municipioMasPequeño']}">Municipio Más Pequeño</td>
+        <td th:text="${reporte['mayorDensidad']}">Mayor Densidad</td>
+        <td th:text="${reporte['menorDensidad']}">Menor Densidad</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
