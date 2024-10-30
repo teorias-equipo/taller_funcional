@@ -52,38 +52,61 @@ public class MunicipioService {
      * @param municipios lista de municipios.
      * @return reporte agrupado por departamento.
      */
-    public Map<Integer, Map<String, Object>> generarReporteJSON(List<Municipio> municipios) {
+    public Map<String, Map<String, Object>> generarReporteJSON(List<Municipio> municipios) {
         Map<Integer, List<Municipio>> municipiosPorDepto = agruparPorDepartamento(municipios);
-        Map<Integer, Map<String, Object>> reporteCompleto = new HashMap<>();
+        Map<String, Map<String, Object>> reporteCompleto = new HashMap<>();
 
         municipiosPorDepto.forEach((codigoDepto, listaMunicipios) -> {
             String nombreDepto = listaMunicipios.get(0).getNombreDepartamento();
+
             int poblacionTotal = listaMunicipios.stream().mapToInt(Municipio::getPoblacionTotal).sum();
             int poblacionUrbana = listaMunicipios.stream().mapToInt(Municipio::getPoblacionUrbana).sum();
             int poblacionRural = listaMunicipios.stream().mapToInt(Municipio::getPoblacionRural).sum();
             double superficieTotal = listaMunicipios.stream().mapToDouble(Municipio::getSuperficie).sum();
+
             double densidadTotal = poblacionTotal / superficieTotal;
             double densidadUrbana = poblacionUrbana / superficieTotal;
+            double densidadRural = poblacionRural / superficieTotal;
+
             double porcentajeUrbana = (poblacionUrbana / (double) poblacionTotal) * 100;
             double porcentajeRural = (poblacionRural / (double) poblacionTotal) * 100;
+
             double areaPromedio = superficieTotal / listaMunicipios.size();
+
+            Municipio municipioMasGrande = listaMunicipios.stream()
+                    .max(Comparator.comparingDouble(Municipio::getSuperficie))
+                    .orElse(null);
+            Municipio municipioMasPequeño = listaMunicipios.stream()
+                    .min(Comparator.comparingDouble(Municipio::getSuperficie))
+                    .orElse(null);
+
+            Municipio mayorDensidad = listaMunicipios.stream()
+                    .max(Comparator.comparingDouble(m -> m.getPoblacionTotal() / m.getSuperficie()))
+                    .orElse(null);
+            Municipio menorDensidad = listaMunicipios.stream()
+                    .min(Comparator.comparingDouble(m -> m.getPoblacionTotal() / m.getSuperficie()))
+                    .orElse(null);
 
             Map<String, Object> reporteDepto = new HashMap<>();
             reporteDepto.put("nombreDepartamento", nombreDepto);
             reporteDepto.put("densidadTotal", densidadTotal);
             reporteDepto.put("densidadUrbana", densidadUrbana);
+            reporteDepto.put("densidadRural", densidadRural);
             reporteDepto.put("porcentajeUrbana", porcentajeUrbana);
             reporteDepto.put("porcentajeRural", porcentajeRural);
             reporteDepto.put("areaPromedio", areaPromedio);
-            reporteDepto.put("municipioMasGrande", listaMunicipios.stream().max(Comparator.comparingDouble(Municipio::getSuperficie)).map(Municipio::getNombreMunicipio).orElse("N/A"));
-            reporteDepto.put("municipioMasPequeño", listaMunicipios.stream().min(Comparator.comparingDouble(Municipio::getSuperficie)).map(Municipio::getNombreMunicipio).orElse("N/A"));
-            reporteDepto.put("mayorDensidad", listaMunicipios.stream().max(Comparator.comparingDouble(m -> m.getPoblacionTotal() / m.getSuperficie())).map(Municipio::getNombreMunicipio).orElse("N/A"));
-            reporteDepto.put("menorDensidad", listaMunicipios.stream().min(Comparator.comparingDouble(m -> m.getPoblacionTotal() / m.getSuperficie())).map(Municipio::getNombreMunicipio).orElse("N/A"));
+            reporteDepto.put("municipioMasGrande", municipioMasGrande != null ? municipioMasGrande.getNombreMunicipio() : "N/A");
+            reporteDepto.put("municipioMasPequeño", municipioMasPequeño != null ? municipioMasPequeño.getNombreMunicipio() : "N/A");
+            reporteDepto.put("mayorDensidad", mayorDensidad != null ? mayorDensidad.getNombreMunicipio() : "N/A");
+            reporteDepto.put("menorDensidad", menorDensidad != null ? menorDensidad.getNombreMunicipio() : "N/A");
 
-            reporteCompleto.put(codigoDepto, reporteDepto);
+            // Conversión de Integer a String para la clave
+            reporteCompleto.put(String.valueOf(codigoDepto), reporteDepto);
         });
+
         return reporteCompleto;
     }
+
 
     /**
      * Genera un reporte JSON para un departamento específico.
@@ -137,4 +160,6 @@ public class MunicipioService {
             e.printStackTrace();
         }
     }
+
+
 }

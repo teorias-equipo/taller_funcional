@@ -38,7 +38,8 @@ public class MunicipioController {
     @GetMapping("/reporteHTML")
     public String obtenerReporteHTML(Model model) {
         List<Municipio> municipios = municipioService.leerArchivoCSV("src/main/resources/datosDivipola.csv");
-        Map<Integer, Map<String, Object>> reporte = municipioService.generarReporteJSON(municipios);
+        // Actualizamos a Map<String, Map<String, Object>> para que coincida con el servicio
+        Map<String, Map<String, Object>> reporte = municipioService.generarReporteJSON(municipios);
         model.addAttribute("reporte", reporte);
         return "reporte"; // Muestra reporte.html en templates
     }
@@ -48,7 +49,7 @@ public class MunicipioController {
      * @return reporte completo agrupado por departamento.
      */
     @GetMapping
-    public Map<Integer, Map<String, Object>> obtenerReporteCompleto() {
+    public Map<String, Map<String, Object>> obtenerReporteCompleto() {
         List<Municipio> municipios = municipioService.leerArchivoCSV("src/main/resources/datosDivipola.csv");
         return municipioService.generarReporteJSON(municipios);
     }
